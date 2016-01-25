@@ -39,7 +39,7 @@ namespace WristbandCsharp
         string down = "150hz_DOWN.wav";
         string found = "ITEM_FOUND.wav";
 
-        int camera = 0; //changed temporarily to -1 from internet source. Was originally 1.
+        int camera = 0; //may need to change this to 1 depending on how many cameras the system has
 
         Capture cap;
         Image<Bgr, Byte> image;

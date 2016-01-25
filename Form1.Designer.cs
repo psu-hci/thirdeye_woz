@@ -881,7 +881,8 @@ namespace WristbandCsharp
 
         private void button5_Click(object sender, EventArgs e)
         {
-            arduino = new Arduino((string)comboBox2.SelectedItem);
+            String portName = (string)comboBox2.SelectedItem;
+            arduino = new Arduino(portName);
         }
 
         private void button4_Click(object sender, System.EventArgs e)
