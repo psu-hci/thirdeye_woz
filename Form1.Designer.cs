@@ -29,6 +29,7 @@ namespace WristbandCsharp
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.intensityLabel = new System.Windows.Forms.Label();
@@ -39,11 +40,6 @@ namespace WristbandCsharp
             this.button5 = new System.Windows.Forms.Button();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.SpokenFeedback = new System.Windows.Forms.CheckBox();
             this.TonalFeedback = new System.Windows.Forms.CheckBox();
@@ -51,7 +47,6 @@ namespace WristbandCsharp
             this.label3 = new System.Windows.Forms.Label();
             this.vibLabel = new System.Windows.Forms.Label();
             this.button10 = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button36 = new System.Windows.Forms.Button();
             this.button35 = new System.Windows.Forms.Button();
@@ -86,6 +81,47 @@ namespace WristbandCsharp
             this.button11 = new System.Windows.Forms.Button();
             this.button22 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
+            this.feedbackTimer = new System.Windows.Forms.Timer(this.components);
+            this.foodIntroButton = new System.Windows.Forms.Button();
+            this.beginShelfScanButton = new System.Windows.Forms.Button();
+            this.endSearch = new System.Windows.Forms.Button();
+            this.startSearchButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button25 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button27 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button24 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.StopSound = new System.Windows.Forms.Button();
+            this.backwardButton = new System.Windows.Forms.Button();
+            this.forwardButton = new System.Windows.Forms.Button();
+            this.feedbackButtons = new System.Windows.Forms.GroupBox();
+            this.speechAndHaptic = new System.Windows.Forms.Button();
+            this.tonalAndHaptic = new System.Windows.Forms.Button();
+            this.Haptic = new System.Windows.Forms.Button();
+            this.Speech = new System.Windows.Forms.Button();
+            this.Tonal = new System.Windows.Forms.Button();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.FrootLoopsButton = new System.Windows.Forms.Button();
+            this.MiniWheatsButton = new System.Windows.Forms.Button();
+            this.RasinBranButton = new System.Windows.Forms.Button();
+            this.FrostedFlakesButton = new System.Windows.Forms.Button();
+            this.CornPopsButton = new System.Windows.Forms.Button();
+            this.proximitySlider = new System.Windows.Forms.TrackBar();
+            this.proximityLabel = new System.Windows.Forms.Label();
+            this.upFeedback = new System.Windows.Forms.Button();
+            this.rightFeedback = new System.Windows.Forms.Button();
+            this.downFeedback = new System.Windows.Forms.Button();
+            this.leftFeedback = new System.Windows.Forms.Button();
+            this.StopFeedback = new System.Windows.Forms.Button();
+            this.stepForwardFeedback = new System.Windows.Forms.Button();
+            this.stepBackwardFeedback = new System.Windows.Forms.Button();
+            this.itemFoundFeedback = new System.Windows.Forms.Button();
+            this.currentFeedbackGroup = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.intensitySlider)).BeginInit();
@@ -94,6 +130,10 @@ namespace WristbandCsharp
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.feedbackButtons.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.proximitySlider)).BeginInit();
+            this.currentFeedbackGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -215,63 +255,6 @@ namespace WristbandCsharp
             this.label4.Text = "Arudino Status";
             this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(121, 266);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(34, 36);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "←";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.Transparent;
-            this.button2.Location = new System.Drawing.Point(809, 266);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(34, 36);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "→";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(452, 539);
-            this.button3.Margin = new System.Windows.Forms.Padding(2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(34, 36);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "↓";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(452, 8);
-            this.button7.Margin = new System.Windows.Forms.Padding(2);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(34, 36);
-            this.button7.TabIndex = 6;
-            this.button7.Text = "↑";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click_1);
-            // 
-            // button8
-            // 
-            this.button8.BackColor = System.Drawing.Color.Transparent;
-            this.button8.Location = new System.Drawing.Point(452, 266);
-            this.button8.Margin = new System.Windows.Forms.Padding(2);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(34, 36);
-            this.button8.TabIndex = 7;
-            this.button8.Text = "⇈";
-            this.button8.UseVisualStyleBackColor = false;
-            this.button8.Click += new System.EventHandler(this.button8_Click_1);
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.SpokenFeedback);
@@ -292,6 +275,7 @@ namespace WristbandCsharp
             this.SpokenFeedback.TabIndex = 1;
             this.SpokenFeedback.Text = "Spoken Feedback";
             this.SpokenFeedback.UseVisualStyleBackColor = true;
+            this.SpokenFeedback.CheckedChanged += new System.EventHandler(this.SpokenFeedback_CheckedChanged);
             // 
             // TonalFeedback
             // 
@@ -303,6 +287,7 @@ namespace WristbandCsharp
             this.TonalFeedback.TabIndex = 0;
             this.TonalFeedback.Text = "Tonal Feedback";
             this.TonalFeedback.UseVisualStyleBackColor = true;
+            this.TonalFeedback.CheckedChanged += new System.EventHandler(this.TonalFeedback_CheckedChanged);
             // 
             // vibrationSlider
             // 
@@ -329,10 +314,11 @@ namespace WristbandCsharp
             // vibLabel
             // 
             this.vibLabel.AutoSize = true;
+            this.vibLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.vibLabel.ForeColor = System.Drawing.Color.Red;
             this.vibLabel.Location = new System.Drawing.Point(336, 604);
             this.vibLabel.Name = "vibLabel";
-            this.vibLabel.Size = new System.Drawing.Size(19, 13);
+            this.vibLabel.Size = new System.Drawing.Size(21, 13);
             this.vibLabel.TabIndex = 13;
             this.vibLabel.Text = "50";
             // 
@@ -346,17 +332,6 @@ namespace WristbandCsharp
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click_1);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(1473, 64);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(17, 26);
-            this.label5.TabIndex = 18;
-            this.label5.Text = " |\r\n V\r\n";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label5.Click += new System.EventHandler(this.label5_Click_2);
-            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.button36);
@@ -369,6 +344,7 @@ namespace WristbandCsharp
             this.groupBox3.TabIndex = 39;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Shelf Search Functions";
+            this.groupBox3.Visible = false;
             // 
             // button36
             // 
@@ -575,12 +551,13 @@ namespace WristbandCsharp
             // 
             // nextItem
             // 
-            this.nextItem.Location = new System.Drawing.Point(1530, 495);
+            this.nextItem.Location = new System.Drawing.Point(1509, 438);
             this.nextItem.Name = "nextItem";
-            this.nextItem.Size = new System.Drawing.Size(124, 50);
+            this.nextItem.Size = new System.Drawing.Size(136, 41);
             this.nextItem.TabIndex = 44;
             this.nextItem.Text = "Next Item";
             this.nextItem.UseVisualStyleBackColor = true;
+            this.nextItem.Visible = false;
             this.nextItem.Click += new System.EventHandler(this.nextItem_Click);
             // 
             // motorActive
@@ -593,6 +570,7 @@ namespace WristbandCsharp
             this.motorActive.Size = new System.Drawing.Size(309, 37);
             this.motorActive.TabIndex = 46;
             this.motorActive.Text = "Motor is NOT active.";
+            this.motorActive.Visible = false;
             this.motorActive.Click += new System.EventHandler(this.motorActive_Click);
             // 
             // CantHear
@@ -624,16 +602,16 @@ namespace WristbandCsharp
             this.groupBox5.Controls.Add(this.button13);
             this.groupBox5.Controls.Add(this.button12);
             this.groupBox5.Controls.Add(this.button11);
-            this.groupBox5.Location = new System.Drawing.Point(1705, 485);
+            this.groupBox5.Location = new System.Drawing.Point(1705, 475);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(200, 172);
+            this.groupBox5.Size = new System.Drawing.Size(200, 182);
             this.groupBox5.TabIndex = 49;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Demo/Training";
             // 
             // button17
             // 
-            this.button17.Location = new System.Drawing.Point(119, 139);
+            this.button17.Location = new System.Drawing.Point(119, 147);
             this.button17.Name = "button17";
             this.button17.Size = new System.Drawing.Size(75, 23);
             this.button17.TabIndex = 6;
@@ -643,7 +621,7 @@ namespace WristbandCsharp
             // 
             // button16
             // 
-            this.button16.Location = new System.Drawing.Point(7, 139);
+            this.button16.Location = new System.Drawing.Point(7, 147);
             this.button16.Name = "button16";
             this.button16.Size = new System.Drawing.Size(75, 23);
             this.button16.TabIndex = 5;
@@ -657,7 +635,7 @@ namespace WristbandCsharp
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(187, 23);
             this.button15.TabIndex = 4;
-            this.button15.Text = "Spoken and Haptic";
+            this.button15.Text = " Haptic and Speech";
             this.button15.UseVisualStyleBackColor = true;
             this.button15.Click += new System.EventHandler(this.button15_Click);
             // 
@@ -667,7 +645,7 @@ namespace WristbandCsharp
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(187, 23);
             this.button14.TabIndex = 3;
-            this.button14.Text = "Tone and Haptic";
+            this.button14.Text = "Haptic and Tone";
             this.button14.UseVisualStyleBackColor = true;
             this.button14.Click += new System.EventHandler(this.button14_Click);
             // 
@@ -687,7 +665,7 @@ namespace WristbandCsharp
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(187, 23);
             this.button12.TabIndex = 1;
-            this.button12.Text = "Spoken ONLY";
+            this.button12.Text = "Speech ONLY";
             this.button12.UseVisualStyleBackColor = true;
             this.button12.Click += new System.EventHandler(this.button12_Click_1);
             // 
@@ -721,11 +699,487 @@ namespace WristbandCsharp
             this.button23.UseVisualStyleBackColor = true;
             this.button23.Click += new System.EventHandler(this.button23_Click);
             // 
+            // feedbackTimer
+            // 
+            this.feedbackTimer.Enabled = true;
+            this.feedbackTimer.Tick += new System.EventHandler(this.feedback);
+            // 
+            // foodIntroButton
+            // 
+            this.foodIntroButton.Location = new System.Drawing.Point(1400, 109);
+            this.foodIntroButton.Name = "foodIntroButton";
+            this.foodIntroButton.Size = new System.Drawing.Size(167, 39);
+            this.foodIntroButton.TabIndex = 58;
+            this.foodIntroButton.Text = "Corn Pops Introduction";
+            this.foodIntroButton.UseVisualStyleBackColor = true;
+            this.foodIntroButton.Visible = false;
+            this.foodIntroButton.Click += new System.EventHandler(this.button24_Click);
+            // 
+            // beginShelfScanButton
+            // 
+            this.beginShelfScanButton.Location = new System.Drawing.Point(1400, 181);
+            this.beginShelfScanButton.Name = "beginShelfScanButton";
+            this.beginShelfScanButton.Size = new System.Drawing.Size(167, 41);
+            this.beginShelfScanButton.TabIndex = 59;
+            this.beginShelfScanButton.Text = "Begin Shelf Scan";
+            this.beginShelfScanButton.UseVisualStyleBackColor = true;
+            this.beginShelfScanButton.Visible = false;
+            this.beginShelfScanButton.Click += new System.EventHandler(this.beginShelfScanButton_Click);
+            // 
+            // endSearch
+            // 
+            this.endSearch.Location = new System.Drawing.Point(1229, 294);
+            this.endSearch.Name = "endSearch";
+            this.endSearch.Size = new System.Drawing.Size(167, 41);
+            this.endSearch.TabIndex = 61;
+            this.endSearch.Text = "Finished Search";
+            this.endSearch.UseVisualStyleBackColor = true;
+            this.endSearch.Visible = false;
+            this.endSearch.Click += new System.EventHandler(this.endSearch_Click);
+            // 
+            // startSearchButton
+            // 
+            this.startSearchButton.Location = new System.Drawing.Point(1056, 294);
+            this.startSearchButton.Name = "startSearchButton";
+            this.startSearchButton.Size = new System.Drawing.Size(167, 41);
+            this.startSearchButton.TabIndex = 68;
+            this.startSearchButton.Text = "Start Search";
+            this.startSearchButton.UseVisualStyleBackColor = true;
+            this.startSearchButton.Visible = false;
+            this.startSearchButton.Click += new System.EventHandler(this.button24_Click_1);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(1818, 98);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(64, 31);
+            this.label1.TabIndex = 75;
+            this.label1.Text = "Key";
+            this.label1.Click += new System.EventHandler(this.label1_Click_2);
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.MenuBar;
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(1798, 132);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(143, 223);
+            this.textBox1.TabIndex = 76;
+            this.textBox1.Text = "W, Up - up\r\nS, Down - down\r\nA, Left - left\r\nD, Right - right\r\nE, Enter - Found\r\nQ" +
+    " - stop\r\nF - step forward\r\nR - step backward";
+            // 
+            // button25
+            // 
+            this.button25.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.button25.Location = new System.Drawing.Point(490, 8);
+            this.button25.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.button25.Name = "button25";
+            this.button25.Size = new System.Drawing.Size(39, 36);
+            this.button25.TabIndex = 72;
+            this.button25.Text = "S";
+            this.button25.UseVisualStyleBackColor = true;
+            this.button25.Visible = false;
+            this.button25.Click += new System.EventHandler(this.StopButton_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(452, 8);
+            this.button7.Margin = new System.Windows.Forms.Padding(2);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(34, 36);
+            this.button7.TabIndex = 6;
+            this.button7.Text = "↑";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Visible = false;
+            this.button7.Click += new System.EventHandler(this.button7_Click_1);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(121, 266);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(34, 36);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "←";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // button27
+            // 
+            this.button27.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.button27.Location = new System.Drawing.Point(159, 266);
+            this.button27.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.button27.Name = "button27";
+            this.button27.Size = new System.Drawing.Size(39, 36);
+            this.button27.TabIndex = 74;
+            this.button27.Text = "S";
+            this.button27.UseVisualStyleBackColor = true;
+            this.button27.Visible = false;
+            this.button27.Click += new System.EventHandler(this.StopButton_Click);
+            // 
+            // button8
+            // 
+            this.button8.BackColor = System.Drawing.Color.Transparent;
+            this.button8.Location = new System.Drawing.Point(452, 266);
+            this.button8.Margin = new System.Windows.Forms.Padding(2);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(34, 36);
+            this.button8.TabIndex = 7;
+            this.button8.Text = "⇈";
+            this.button8.UseVisualStyleBackColor = false;
+            this.button8.Visible = false;
+            this.button8.Click += new System.EventHandler(this.button8_Click_1);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(452, 539);
+            this.button3.Margin = new System.Windows.Forms.Padding(2);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(34, 36);
+            this.button3.TabIndex = 5;
+            this.button3.Text = "↓";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Visible = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button24
+            // 
+            this.button24.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.button24.Location = new System.Drawing.Point(490, 539);
+            this.button24.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.button24.Name = "button24";
+            this.button24.Size = new System.Drawing.Size(39, 36);
+            this.button24.TabIndex = 73;
+            this.button24.Text = "S";
+            this.button24.UseVisualStyleBackColor = true;
+            this.button24.Visible = false;
+            this.button24.Click += new System.EventHandler(this.StopButton_Click);
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.Transparent;
+            this.button2.Location = new System.Drawing.Point(763, 266);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(34, 36);
+            this.button2.TabIndex = 4;
+            this.button2.Text = "→";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Visible = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            // 
+            // StopSound
+            // 
+            this.StopSound.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.StopSound.Location = new System.Drawing.Point(801, 266);
+            this.StopSound.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.StopSound.Name = "StopSound";
+            this.StopSound.Size = new System.Drawing.Size(39, 36);
+            this.StopSound.TabIndex = 55;
+            this.StopSound.Text = "S";
+            this.StopSound.UseVisualStyleBackColor = true;
+            this.StopSound.Visible = false;
+            this.StopSound.Click += new System.EventHandler(this.StopButton_Click);
+            // 
+            // backwardButton
+            // 
+            this.backwardButton.Location = new System.Drawing.Point(858, 537);
+            this.backwardButton.Name = "backwardButton";
+            this.backwardButton.Size = new System.Drawing.Size(102, 36);
+            this.backwardButton.TabIndex = 57;
+            this.backwardButton.Text = "Step Backward";
+            this.backwardButton.UseVisualStyleBackColor = true;
+            this.backwardButton.Visible = false;
+            this.backwardButton.Click += new System.EventHandler(this.backwardButton_Click);
+            // 
+            // forwardButton
+            // 
+            this.forwardButton.Location = new System.Drawing.Point(858, 13);
+            this.forwardButton.Name = "forwardButton";
+            this.forwardButton.Size = new System.Drawing.Size(102, 31);
+            this.forwardButton.TabIndex = 56;
+            this.forwardButton.Text = "Step Forward";
+            this.forwardButton.UseVisualStyleBackColor = true;
+            this.forwardButton.Visible = false;
+            this.forwardButton.Click += new System.EventHandler(this.forwardButton_Click);
+            // 
+            // feedbackButtons
+            // 
+            this.feedbackButtons.Controls.Add(this.speechAndHaptic);
+            this.feedbackButtons.Controls.Add(this.tonalAndHaptic);
+            this.feedbackButtons.Controls.Add(this.Haptic);
+            this.feedbackButtons.Controls.Add(this.Speech);
+            this.feedbackButtons.Controls.Add(this.Tonal);
+            this.feedbackButtons.Location = new System.Drawing.Point(1227, 109);
+            this.feedbackButtons.Name = "feedbackButtons";
+            this.feedbackButtons.Size = new System.Drawing.Size(167, 179);
+            this.feedbackButtons.TabIndex = 77;
+            this.feedbackButtons.TabStop = false;
+            this.feedbackButtons.Text = "Feedback Type";
+            // 
+            // speechAndHaptic
+            // 
+            this.speechAndHaptic.Location = new System.Drawing.Point(7, 139);
+            this.speechAndHaptic.Name = "speechAndHaptic";
+            this.speechAndHaptic.Size = new System.Drawing.Size(151, 23);
+            this.speechAndHaptic.TabIndex = 4;
+            this.speechAndHaptic.Text = "Speech & Haptic";
+            this.speechAndHaptic.UseVisualStyleBackColor = true;
+            this.speechAndHaptic.Click += new System.EventHandler(this.speechAndHaptic_Click);
+            // 
+            // tonalAndHaptic
+            // 
+            this.tonalAndHaptic.Location = new System.Drawing.Point(6, 110);
+            this.tonalAndHaptic.Name = "tonalAndHaptic";
+            this.tonalAndHaptic.Size = new System.Drawing.Size(151, 23);
+            this.tonalAndHaptic.TabIndex = 3;
+            this.tonalAndHaptic.Text = "Tonal & Haptic";
+            this.tonalAndHaptic.UseVisualStyleBackColor = true;
+            this.tonalAndHaptic.Click += new System.EventHandler(this.tonalAndHaptic_Click);
+            // 
+            // Haptic
+            // 
+            this.Haptic.Location = new System.Drawing.Point(7, 81);
+            this.Haptic.Name = "Haptic";
+            this.Haptic.Size = new System.Drawing.Size(151, 23);
+            this.Haptic.TabIndex = 2;
+            this.Haptic.Text = "Haptic";
+            this.Haptic.UseVisualStyleBackColor = true;
+            this.Haptic.Click += new System.EventHandler(this.Haptic_Click);
+            // 
+            // Speech
+            // 
+            this.Speech.Location = new System.Drawing.Point(7, 52);
+            this.Speech.Name = "Speech";
+            this.Speech.Size = new System.Drawing.Size(151, 23);
+            this.Speech.TabIndex = 1;
+            this.Speech.Text = "Speech";
+            this.Speech.UseVisualStyleBackColor = true;
+            this.Speech.Click += new System.EventHandler(this.Speech_Click);
+            // 
+            // Tonal
+            // 
+            this.Tonal.Location = new System.Drawing.Point(7, 23);
+            this.Tonal.Name = "Tonal";
+            this.Tonal.Size = new System.Drawing.Size(151, 23);
+            this.Tonal.TabIndex = 0;
+            this.Tonal.Text = "Tonal";
+            this.Tonal.UseVisualStyleBackColor = true;
+            this.Tonal.Click += new System.EventHandler(this.Tonal_Click);
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.FrootLoopsButton);
+            this.groupBox6.Controls.Add(this.MiniWheatsButton);
+            this.groupBox6.Controls.Add(this.RasinBranButton);
+            this.groupBox6.Controls.Add(this.FrostedFlakesButton);
+            this.groupBox6.Controls.Add(this.CornPopsButton);
+            this.groupBox6.Location = new System.Drawing.Point(1056, 109);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(167, 179);
+            this.groupBox6.TabIndex = 78;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Cereal Box";
+            this.groupBox6.Enter += new System.EventHandler(this.groupBox6_Enter);
+            // 
+            // FrootLoopsButton
+            // 
+            this.FrootLoopsButton.Location = new System.Drawing.Point(6, 139);
+            this.FrootLoopsButton.Name = "FrootLoopsButton";
+            this.FrootLoopsButton.Size = new System.Drawing.Size(154, 23);
+            this.FrootLoopsButton.TabIndex = 4;
+            this.FrootLoopsButton.Text = "Froot Loops Introduction";
+            this.FrootLoopsButton.UseVisualStyleBackColor = true;
+            this.FrootLoopsButton.Click += new System.EventHandler(this.button31_Click);
+            // 
+            // MiniWheatsButton
+            // 
+            this.MiniWheatsButton.Location = new System.Drawing.Point(7, 52);
+            this.MiniWheatsButton.Name = "MiniWheatsButton";
+            this.MiniWheatsButton.Size = new System.Drawing.Size(154, 23);
+            this.MiniWheatsButton.TabIndex = 3;
+            this.MiniWheatsButton.Text = "Mini Wheats Introduction";
+            this.MiniWheatsButton.UseVisualStyleBackColor = true;
+            this.MiniWheatsButton.Click += new System.EventHandler(this.button30_Click);
+            // 
+            // RasinBranButton
+            // 
+            this.RasinBranButton.Location = new System.Drawing.Point(7, 110);
+            this.RasinBranButton.Name = "RasinBranButton";
+            this.RasinBranButton.Size = new System.Drawing.Size(154, 23);
+            this.RasinBranButton.TabIndex = 2;
+            this.RasinBranButton.Text = "Rasin Bran Introduction";
+            this.RasinBranButton.UseVisualStyleBackColor = true;
+            this.RasinBranButton.Click += new System.EventHandler(this.button29_Click);
+            // 
+            // FrostedFlakesButton
+            // 
+            this.FrostedFlakesButton.Location = new System.Drawing.Point(7, 81);
+            this.FrostedFlakesButton.Name = "FrostedFlakesButton";
+            this.FrostedFlakesButton.Size = new System.Drawing.Size(154, 23);
+            this.FrostedFlakesButton.TabIndex = 1;
+            this.FrostedFlakesButton.Text = "Frosted Flakes Introduction";
+            this.FrostedFlakesButton.UseVisualStyleBackColor = true;
+            this.FrostedFlakesButton.Click += new System.EventHandler(this.button28_Click);
+            // 
+            // CornPopsButton
+            // 
+            this.CornPopsButton.Location = new System.Drawing.Point(7, 26);
+            this.CornPopsButton.Name = "CornPopsButton";
+            this.CornPopsButton.Size = new System.Drawing.Size(154, 23);
+            this.CornPopsButton.TabIndex = 0;
+            this.CornPopsButton.Text = "Corn Pops Introduction";
+            this.CornPopsButton.UseVisualStyleBackColor = true;
+            this.CornPopsButton.Click += new System.EventHandler(this.button26_Click);
+            // 
+            // proximitySlider
+            // 
+            this.proximitySlider.LargeChange = 1;
+            this.proximitySlider.Location = new System.Drawing.Point(965, 294);
+            this.proximitySlider.Name = "proximitySlider";
+            this.proximitySlider.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.proximitySlider.Size = new System.Drawing.Size(45, 160);
+            this.proximitySlider.TabIndex = 10;
+            this.proximitySlider.Value = 5;
+            this.proximitySlider.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
+            // proximityLabel
+            // 
+            this.proximityLabel.AutoSize = true;
+            this.proximityLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.proximityLabel.ForeColor = System.Drawing.Color.Red;
+            this.proximityLabel.Location = new System.Drawing.Point(965, 278);
+            this.proximityLabel.Name = "proximityLabel";
+            this.proximityLabel.Size = new System.Drawing.Size(21, 13);
+            this.proximityLabel.TabIndex = 80;
+            this.proximityLabel.Text = "50";
+            this.proximityLabel.Click += new System.EventHandler(this.label5_Click_4);
+            // 
+            // upFeedback
+            // 
+            this.upFeedback.Location = new System.Drawing.Point(65, 18);
+            this.upFeedback.Margin = new System.Windows.Forms.Padding(2);
+            this.upFeedback.Name = "upFeedback";
+            this.upFeedback.Size = new System.Drawing.Size(34, 36);
+            this.upFeedback.TabIndex = 81;
+            this.upFeedback.Text = "↑";
+            this.upFeedback.UseVisualStyleBackColor = true;
+            // 
+            // rightFeedback
+            // 
+            this.rightFeedback.BackColor = System.Drawing.Color.Transparent;
+            this.rightFeedback.Location = new System.Drawing.Point(108, 58);
+            this.rightFeedback.Margin = new System.Windows.Forms.Padding(2);
+            this.rightFeedback.Name = "rightFeedback";
+            this.rightFeedback.Size = new System.Drawing.Size(34, 36);
+            this.rightFeedback.TabIndex = 82;
+            this.rightFeedback.Text = "→";
+            this.rightFeedback.UseVisualStyleBackColor = false;
+            // 
+            // downFeedback
+            // 
+            this.downFeedback.Location = new System.Drawing.Point(65, 59);
+            this.downFeedback.Margin = new System.Windows.Forms.Padding(2);
+            this.downFeedback.Name = "downFeedback";
+            this.downFeedback.Size = new System.Drawing.Size(34, 36);
+            this.downFeedback.TabIndex = 83;
+            this.downFeedback.Text = "↓";
+            this.downFeedback.UseVisualStyleBackColor = true;
+            // 
+            // leftFeedback
+            // 
+            this.leftFeedback.Location = new System.Drawing.Point(20, 59);
+            this.leftFeedback.Margin = new System.Windows.Forms.Padding(2);
+            this.leftFeedback.Name = "leftFeedback";
+            this.leftFeedback.Size = new System.Drawing.Size(34, 36);
+            this.leftFeedback.TabIndex = 84;
+            this.leftFeedback.Text = "←";
+            this.leftFeedback.UseVisualStyleBackColor = true;
+            // 
+            // StopFeedback
+            // 
+            this.StopFeedback.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.StopFeedback.Location = new System.Drawing.Point(15, 19);
+            this.StopFeedback.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.StopFeedback.Name = "StopFeedback";
+            this.StopFeedback.Size = new System.Drawing.Size(39, 36);
+            this.StopFeedback.TabIndex = 85;
+            this.StopFeedback.Text = "S";
+            this.StopFeedback.UseVisualStyleBackColor = true;
+            this.StopFeedback.Click += new System.EventHandler(this.StopFeedback_Click);
+            // 
+            // stepForwardFeedback
+            // 
+            this.stepForwardFeedback.Location = new System.Drawing.Point(147, 61);
+            this.stepForwardFeedback.Name = "stepForwardFeedback";
+            this.stepForwardFeedback.Size = new System.Drawing.Size(102, 31);
+            this.stepForwardFeedback.TabIndex = 86;
+            this.stepForwardFeedback.Text = "Step Forward";
+            this.stepForwardFeedback.UseVisualStyleBackColor = true;
+            // 
+            // stepBackwardFeedback
+            // 
+            this.stepBackwardFeedback.Location = new System.Drawing.Point(154, 19);
+            this.stepBackwardFeedback.Name = "stepBackwardFeedback";
+            this.stepBackwardFeedback.Size = new System.Drawing.Size(102, 36);
+            this.stepBackwardFeedback.TabIndex = 87;
+            this.stepBackwardFeedback.Text = "Step Backward";
+            this.stepBackwardFeedback.UseVisualStyleBackColor = true;
+            // 
+            // itemFoundFeedback
+            // 
+            this.itemFoundFeedback.BackColor = System.Drawing.Color.Transparent;
+            this.itemFoundFeedback.Location = new System.Drawing.Point(108, 18);
+            this.itemFoundFeedback.Margin = new System.Windows.Forms.Padding(2);
+            this.itemFoundFeedback.Name = "itemFoundFeedback";
+            this.itemFoundFeedback.Size = new System.Drawing.Size(34, 36);
+            this.itemFoundFeedback.TabIndex = 88;
+            this.itemFoundFeedback.Text = "⇈";
+            this.itemFoundFeedback.UseVisualStyleBackColor = false;
+            // 
+            // currentFeedbackGroup
+            // 
+            this.currentFeedbackGroup.Controls.Add(this.stepBackwardFeedback);
+            this.currentFeedbackGroup.Controls.Add(this.itemFoundFeedback);
+            this.currentFeedbackGroup.Controls.Add(this.stepForwardFeedback);
+            this.currentFeedbackGroup.Controls.Add(this.StopFeedback);
+            this.currentFeedbackGroup.Controls.Add(this.rightFeedback);
+            this.currentFeedbackGroup.Controls.Add(this.leftFeedback);
+            this.currentFeedbackGroup.Controls.Add(this.downFeedback);
+            this.currentFeedbackGroup.Controls.Add(this.upFeedback);
+            this.currentFeedbackGroup.Location = new System.Drawing.Point(1063, 354);
+            this.currentFeedbackGroup.Name = "currentFeedbackGroup";
+            this.currentFeedbackGroup.Size = new System.Drawing.Size(262, 100);
+            this.currentFeedbackGroup.TabIndex = 89;
+            this.currentFeedbackGroup.TabStop = false;
+            this.currentFeedbackGroup.Text = "Current Feedback";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1966, 679);
+            this.Controls.Add(this.proximityLabel);
+            this.Controls.Add(this.proximitySlider);
+            this.Controls.Add(this.groupBox6);
+            this.Controls.Add(this.feedbackButtons);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.button27);
+            this.Controls.Add(this.button24);
+            this.Controls.Add(this.button25);
+            this.Controls.Add(this.startSearchButton);
+            this.Controls.Add(this.endSearch);
+            this.Controls.Add(this.beginShelfScanButton);
+            this.Controls.Add(this.foodIntroButton);
+            this.Controls.Add(this.backwardButton);
+            this.Controls.Add(this.forwardButton);
+            this.Controls.Add(this.StopSound);
             this.Controls.Add(this.button23);
             this.Controls.Add(this.button22);
             this.Controls.Add(this.groupBox5);
@@ -737,7 +1191,6 @@ namespace WristbandCsharp
             this.Controls.Add(this.label18);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.vibLabel);
             this.Controls.Add(this.label3);
@@ -750,6 +1203,7 @@ namespace WristbandCsharp
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.currentFeedbackGroup);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "Form1";
@@ -766,6 +1220,10 @@ namespace WristbandCsharp
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
+            this.feedbackButtons.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.proximitySlider)).EndInit();
+            this.currentFeedbackGroup.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -881,15 +1339,18 @@ namespace WristbandCsharp
 
         private void button5_Click(object sender, EventArgs e)
         {
-            String portName = (string)comboBox2.SelectedItem;
-            arduino = new Arduino(portName);
+            //arduino = new Arduino((string)comboBox2.SelectedItem);
+            feedbackPlayer.initializeArduino((string)comboBox2.SelectedItem);
+            feedbackPlayer.setVibration(true);
         }
 
         private void button4_Click(object sender, System.EventArgs e)
         {
             //This is the disconnect button.
-            arduino.ClosePort();
-            arduino = null;
+            //arduino.ClosePort();
+            //arduino = null;
+            feedbackPlayer.closeArduino();
+            feedbackPlayer.setVibration(false);
         }
 
         private void button6_Click(object sender, System.EventArgs e)
@@ -930,11 +1391,6 @@ namespace WristbandCsharp
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox SpokenFeedback;
         private System.Windows.Forms.CheckBox TonalFeedback;
@@ -945,7 +1401,6 @@ namespace WristbandCsharp
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label vibLabel;
         private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button button9;
@@ -980,5 +1435,46 @@ namespace WristbandCsharp
         private System.Windows.Forms.Button button11;
         private System.Windows.Forms.Button button22;
         private System.Windows.Forms.Button button23;
+        private System.Windows.Forms.Timer feedbackTimer;
+        private System.Windows.Forms.Button foodIntroButton;
+        private System.Windows.Forms.Button beginShelfScanButton;
+        private System.Windows.Forms.Button endSearch;
+        private System.Windows.Forms.Button startSearchButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button25;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button27;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button24;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button StopSound;
+        private System.Windows.Forms.Button backwardButton;
+        private System.Windows.Forms.Button forwardButton;
+        private System.Windows.Forms.GroupBox feedbackButtons;
+        private System.Windows.Forms.Button speechAndHaptic;
+        private System.Windows.Forms.Button tonalAndHaptic;
+        private System.Windows.Forms.Button Haptic;
+        private System.Windows.Forms.Button Speech;
+        private System.Windows.Forms.Button Tonal;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Button FrootLoopsButton;
+        private System.Windows.Forms.Button MiniWheatsButton;
+        private System.Windows.Forms.Button RasinBranButton;
+        private System.Windows.Forms.Button FrostedFlakesButton;
+        private System.Windows.Forms.Button CornPopsButton;
+        private System.Windows.Forms.TrackBar proximitySlider;
+        private System.Windows.Forms.Label proximityLabel;
+        private System.Windows.Forms.Button upFeedback;
+        private System.Windows.Forms.Button rightFeedback;
+        private System.Windows.Forms.Button downFeedback;
+        private System.Windows.Forms.Button leftFeedback;
+        private System.Windows.Forms.Button StopFeedback;
+        private System.Windows.Forms.Button stepForwardFeedback;
+        private System.Windows.Forms.Button stepBackwardFeedback;
+        private System.Windows.Forms.Button itemFoundFeedback;
+        private System.Windows.Forms.GroupBox currentFeedbackGroup;
     }
 }

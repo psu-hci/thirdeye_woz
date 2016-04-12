@@ -1,0 +1,6 @@
+Down: 200Hz
+Left and Right: 600Hz
+Up: 800 Hz
+step forward: 600Hz
+step backward: 600Hz
+stop: 600Hz

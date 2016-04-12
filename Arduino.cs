@@ -15,7 +15,7 @@ namespace WristbandCsharp
         private const int DEFAULT_INTENSITY = 50;
         private const int DEFAULT_DURATION = 5; //changed to 25 for shorter duration
         private ArduinoPort port = null;
-        private string comPort = "COM5";  // default value, this is the USB port that the arduino is connected to
+        private string comPort = "COM4";
 
         class ArduinoPort : SerialPort
         {
@@ -27,16 +27,23 @@ namespace WristbandCsharp
             public ArduinoPort(string portName)
                 : base(portName)
             {
-                
                 Open();
+
+
                 Console.WriteLine("Initialized on {0}.", portName);
             }
         }
 
         public Arduino(string portName)
         {
+            //port = new ArduinoPort(portName);
             this.comPort = portName;
-            port = new ArduinoPort(comPort);
+            port = new ArduinoPort(this.comPort);
+            // port = new ArduinoPort("COM4"); //trying to get rid of having to select this
+            //MANUALLY ASSIGNED TO COM4, USE COMMAND ABOVE TO BRING BACK SCANNER
+
+
+            //port = new ArduinoPort(SerialPort.GetPortNames()); rubbish.
         }
 
         ~Arduino()

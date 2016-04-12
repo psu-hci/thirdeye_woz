@@ -32,27 +32,40 @@ namespace WristbandCsharp
 
         int intensityPercent = 50; //actually, the duration
         int durationPercent = 50; //actually, the intensity
+        int proximity = 50;  // closeness of participant to object
 
-        string right = "right.wav";
-        string left = "left.wav";
-        string up = "800hz_UP.wav";
-        string down = "150hz_DOWN.wav";
-        string found = "ITEM_FOUND.wav";
+        int timerCount = 0;
+        int timerCountMax = 10;
 
-        int camera = 0; //may need to change this to 1 depending on how many cameras the system has
+        // add the sound files here so that they can be changed easier.
+        //string left = @"C:\Users\thirdeye\Desktop\WizardofOz-v5-RandomSteps\WristbandCSharp\WristbandCsharp\left.wav";
+        //string down = @"C:\Users\thirdeye\Desktop\WizardofOz-v5-RandomSteps\WristbandCSharp\WristbandCsharp\150hz_DOWN.wav";
+        //string right = @"C:\Users\thirdeye\Desktop\WizardofOz-v5-RandomSteps\WristbandCSharp\WristbandCsharp\right.wav";
+        //string up = @"C:\Users\thirdeye\Desktop\WizardofOz-v5-RandomSteps\WristbandCSharp\WristbandCsharp\800hz_UP.wav";
+        //string found = @"C:\Users\thirdeye\Desktop\WizardofOz-v5-RandomSteps\WristbandCSharp\WristbandCsharp\ITEM_FOUND.wav";
+
+        int camera = 0; //changed temporarily to -1 from internet source. Was originally 1.
 
         Capture cap;
         Image<Bgr, Byte> image;
+
+        // initialize a player for playing sound files
+        // System.Media.SoundPlayer player = new SoundPlayer();
+
+        // initialize and arduino
         Arduino arduino = null;
 
-        //initialize vocal processing
-        SpeechSynthesizer reader = new SpeechSynthesizer(); 
+        // initialize vocal processing
+        SpeechSynthesizer reader = new SpeechSynthesizer();
+
+        // contains the name of the current cereal
+        string cerealName = "";
+        // contains the feedback type, currently
+        string feedbackType = "";
+        List<string> feedbackTypes = new List<string> { "Haptic", "Tonal", "Speech", "Haptic and Speech", "Haptic and Tonal" };
 
         //Declaring procedure array for random selection
         //string[] itemlists = { "item1Retreive, item2Retrieve, item3Retrieve, item4Retreive, item5Retreive" };
-
-        //List<string> monkeyButt = new List<string>();
-       // monkeyButt.Add("item1");
 
         //set up procedure calls
         List<string> itemArray = new List<string>() { "item1Retrieve", "item2Retrieve", "item3Retrieve", "item4Retreive", "item5Retreive" };
@@ -63,7 +76,6 @@ namespace WristbandCsharp
         Button FF_Switch = new Button();
         Button FF_Stay = new Button();
         Button FF_ShelfScan = new Button();
-
 
         Button SBBQ_Intro = new Button();
         Button SBBQ_ShelfScan = new Button();
@@ -96,9 +108,19 @@ namespace WristbandCsharp
 
         Random rnd = new Random(); //genereate new random object for selecting from the array
 
+        // this will control all feedback given to the participant
+        FeedBackPlayer feedbackPlayer = new FeedBackPlayer();
+
+        // create a new log writer
+        string logLocation = @"C:\Users\thirdeye\Desktop\log.txt";
+        logWriter log;
+
 
         public Form1()
         {
+            // FOR TESTING PURPOSES, SET THIS TO A FASTER SPEED
+            reader.Rate = 0;
+            // SET THIS BACK TO 0 FOR EXPERIMENT
 
             this.KeyPreview = true;
 
@@ -142,8 +164,11 @@ namespace WristbandCsharp
             //webBrowser2.Navigate(new Uri(String.Format("file:///{0}/LabStudyProcedure.html", curDir))); //used to be used. Phased out for natural voice processing.
 
             //Begin audio capture here
-            
 
+
+            // start the log writing
+            log = new logWriter(logLocation);
+            log.newExperiment("New Experiment");
         }
 
 
@@ -160,118 +185,176 @@ namespace WristbandCsharp
 
         }
 
+        
         private void RefreshSerialPortList()
         {
             // Combo box 2 - Arduino selection
             comboBox2.Items.Clear();
             comboBox2.Items.AddRange(SerialPort.GetPortNames());
+
+            // this will work for now, but should be changed.
+            // comboBox2.Items.Remove("COM4");
         }
 
+        // LEFT
         private void button1_Click_1(object sender, EventArgs e)
         {
-            if (arduino!= null)
-            {
-                arduino.SendPacket(0, intensityPercent, durationPercent);
-            }
+//            Console.WriteLine(timerCount);
+//            Console.WriteLine(timerCountMax);
+//            Console.WriteLine();
+            timerCount = timerCountMax;
+            feedbackPlayer.setLeft();
+            log.writeTimeAction("left click");
+            //if (arduino!= null)
+            //{
+            //    arduino.SendPacket(0, intensityPercent, durationPercent);
+            //}
 
-            if (TonalFeedback.Checked)
-            {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(left);
-                player.Play();
-            }
+            //if (TonalFeedback.Checked)
+            //{
 
-            if (SpokenFeedback.Checked)
-            {
-                //System.Media.SoundPlayer playerVoice = new System.Media.SoundPlayer(@"C:\Users\Jake\Desktop\WizardofOz-v3 wAudio\WristbandCSharp\WristbandCsharp\left-Spoken.wav");
-                //playerVoice.Play();
-                //Removed above to swap for native speech
-                reader.SpeakAsync("Left");
-            }
+            //    player.SoundLocation = left;
+            //    player.Load();
+            //    player.PlayLooping();
+            //}
+
+            //if (SpokenFeedback.Checked)
+            //{
+            //    //System.Media.SoundPlayer playerVoice = new System.Media.SoundPlayer(@"C:\Users\Jake\Desktop\WizardofOz-v3 wAudio\WristbandCSharp\WristbandCsharp\left-Spoken.wav");
+            //    //playerVoice.Play();
+            //    //Removed above to swap for native speech
+            //    reader.SpeakAsync("Left");
+            //}
         }
 
+        // RIGHT
         private void button2_Click_1(object sender, EventArgs e)
         {
-            if (arduino != null)
-            {
-                arduino.SendPacket(3, intensityPercent, durationPercent);
-            }
+            timerCount = timerCountMax;
+            feedbackPlayer.setRight();
+            log.writeTimeAction("right click");
+            //direction = "right";
+            //proximity = 50;
+            //proximityLevel.Text = "50";
+            //proximitySlider.Value = 5;
 
-            if (TonalFeedback.Checked)
-            {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(down);
-                player.Play();
-            }
+            //if (arduino != null)
+            //{
+            //    arduino.SendPacket(2, intensityPercent, durationPercent);
+            //}
 
-            if (SpokenFeedback.Checked)
-            {
-                //System.Media.SoundPlayer playerVoice = new System.Media.SoundPlayer(@"C:\Users\Jake\Desktop\WizardofOz-v3 wAudio\WristbandCSharp\WristbandCsharp\right-Spoken.wav");
-                //playerVoice.Play();
-                reader.SpeakAsync("Right");
-            }
+            //if (TonalFeedback.Checked)
+            //{
+            //    player.SoundLocation = right;
+            //    player.Load();
+            //    player.PlayLooping();
+            //}
+
+            //if (SpokenFeedback.Checked)
+            //{
+            //    //System.Media.SoundPlayer playerVoice = new System.Media.SoundPlayer(@"C:\Users\Jake\Desktop\WizardofOz-v3 wAudio\WristbandCSharp\WristbandCsharp\right-Spoken.wav");
+            //    //playerVoice.Play();
+            //    reader.SpeakAsync("Right");
+            //}
         }
 
+        // DOWN
         private void button3_Click(object sender, EventArgs e)
         {
-            if (arduino != null)
-            {
-                arduino.SendPacket(2, intensityPercent, durationPercent);
-            }
+            timerCount = timerCountMax;
+            feedbackPlayer.setDown();
+            log.writeTimeAction("down click");
+            //direction = "down";
+            //proximity = 50;
+            //proximityLevel.Text = "50";
+            //proximitySlider.Value = 5;
 
-            if (TonalFeedback.Checked)
-            {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(down);
-                player.Play();
-            }
+            //if (arduino != null)
+            //{
+            //    arduino.SendPacket(3, intensityPercent, durationPercent);
+            //}
 
-            if (SpokenFeedback.Checked)
-            {
-                //System.Media.SoundPlayer playerVoice = new System.Media.SoundPlayer(@"C:\Users\Jake\Desktop\WizardofOz-v3 wAudio\WristbandCSharp\WristbandCsharp\down-Spoken.wav");
-                //playerVoice.Play();
-                reader.SpeakAsync("Down");
-            }
+            //if (TonalFeedback.Checked)
+            //{
+            //    player.SoundLocation = down;
+            //    player.Load();
+            //    player.PlayLooping();
+            //}
+
+            //if (SpokenFeedback.Checked)
+            //{
+            //    //System.Media.SoundPlayer playerVoice = new System.Media.SoundPlayer(@"C:\Users\Jake\Desktop\WizardofOz-v3 wAudio\WristbandCSharp\WristbandCsharp\down-Spoken.wav");
+            //    //playerVoice.Play();
+            //    reader.SpeakAsync("Down");
+            //}
         }
 
+        // UP
         private void button7_Click_1(object sender, EventArgs e)
         {
-            if (arduino != null)
-            {
-                arduino.SendPacket(1, intensityPercent, durationPercent);
-            }
+            timerCount = timerCountMax;
+            feedbackPlayer.setUp();
+            log.writeTimeAction("up click");
+            //direction = "up";
+            //proximity = 50;
+            //proximityLevel.Text = "50";
+            //proximitySlider.Value = 5;
 
-            if (TonalFeedback.Checked)
-            {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(up);
-                player.Play();
-            }
+            //if (arduino != null)
+            //{
+            //    arduino.SendPacket(1, intensityPercent, durationPercent);
+            //}
 
-            if (SpokenFeedback.Checked)
-            {
-                //System.Media.SoundPlayer playerVoice = new System.Media.SoundPlayer(@"C:\Users\Jake\Desktop\WizardofOz-v3 wAudio\WristbandCSharp\WristbandCsharp\up-Spoken.wav");
-                //playerVoice.Play();
-                reader.SpeakAsync("Up");
-            }
+            //player.SoundLocation = up;
+            //player.Load();
+
+            //if (TonalFeedback.Checked)
+            //{
+            //    player.SoundLocation = up;
+            //    player.Load();
+            //    player.PlayLooping();
+            //}
+
+            //if (SpokenFeedback.Checked)
+            //{
+            //    //System.Media.SoundPlayer playerVoice = new System.Media.SoundPlayer(@"C:\Users\Jake\Desktop\WizardofOz-v3 wAudio\WristbandCSharp\WristbandCsharp\up-Spoken.wav");
+            //    //playerVoice.Play();
+            //    reader.SpeakAsync("Up");
+            //}
         }
 
+        // FOUND
         private void button8_Click_1(object sender, EventArgs e)
         {
-            if (arduino != null)
-            {
-                arduino.SendPacket(5, intensityPercent, durationPercent);
-            }
+            timerCount = timerCountMax;
+            feedbackPlayer.setFound();
+            log.writeTimeAction("found click");
+            //direction = "found";
+            //proximity = 50;
+            //proximityLevel.Text = "50";
+            //proximitySlider.Value = 5;
 
-            if (TonalFeedback.Checked)
-            {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(found);
-                player.Play();
-            }
+            //if (arduino != null)
+            //{
+            //    arduino.SendPacket(5, intensityPercent, durationPercent);
+            //}
 
-            if (SpokenFeedback.Checked)
-            {
-                reader.SpeakAsync("Item found. Begin to move your hand forward");
-                //System.Media.SoundPlayer playerVoice = new System.Media.SoundPlayer(@"C:\Users\Jake\Desktop\WizardofOz-v3 wAudio\WristbandCSharp\WristbandCsharp\found-Spoken.wav");
-                //playerVoice.Play();
-            }
+            //if (TonalFeedback.Checked)
+            //{
+            //    player.SoundLocation = found;
+            //    player.Load();
+            //    player.Play();
+            //}
+
+            //if (SpokenFeedback.Checked)
+            //{
+            //    reader.SpeakAsync("Item found. Begin to move your hand forward");
+            //    //System.Media.SoundPlayer playerVoice = new System.Media.SoundPlayer(@"C:\Users\Jake\Desktop\WizardofOz-v3 wAudio\WristbandCSharp\WristbandCsharp\found-Spoken.wav");
+            //    //playerVoice.Play();
+            //}
         }
+
+
 
         protected override bool IsInputKey(Keys keyData)
         {
@@ -298,43 +381,87 @@ namespace WristbandCsharp
                 arduino.SendPacket(0, 0, 0);
             }
         }
+
+        /// <summary>
+        /// Allows for control with keyboard: 
+        /// W, Up - up
+        /// S, Down - down
+        /// A, Left - left
+        /// D, Right - right
+        /// E, Enter - forward
+        /// Q - stop
+        /// F - step forward
+        /// R - step backward
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
+        private void resetColors ()
+        {
+            leftFeedback.BackColor = button11.BackColor;
+            rightFeedback.BackColor = button11.BackColor;
+            upFeedback.BackColor = button11.BackColor;
+            downFeedback.BackColor = button11.BackColor;
+            itemFoundFeedback.BackColor = button11.BackColor;
+            StopFeedback.BackColor = button11.BackColor;
+            stepBackwardFeedback.BackColor = button11.BackColor;
+            stepForwardFeedback.BackColor = button11.BackColor;
+        }
+
         private void Form1_OnKeyDown(object sender, KeyEventArgs e) //added this in, changed from protected to private
         {
+            timerCount = timerCountMax;
+            feedbackPlayer.cancelSpeech();
+            resetColors();
+
             //base.OnKeyDown(e); //removed for v2
             //char input = char.Parse(e.KeyCode);
             switch (e.KeyCode) //changed to keycode from KeyChar
             {
+                case (Keys.Left):
                 case (Keys.A): //a
-                    if (arduino != null)
-                    {
-                        arduino.SendPacket(0, intensityPercent, durationPercent);
-                        
-                    }
+                    leftFeedback.BackColor = Color.LimeGreen;
+                    feedbackPlayer.setLeft();
+                    log.writeTimeAction("Left Key Press");
                     break;
+                case (Keys.Right):
                 case (Keys.D):  //d
-                    if (arduino != null)
-                    {
-                        arduino.SendPacket(2, intensityPercent, durationPercent);
-                    }
+                    rightFeedback.BackColor = Color.LimeGreen;
+                    feedbackPlayer.setRight();
+                    log.writeTimeAction("Right Key Press");
                     break;
+                case (Keys.Up):
                 case (Keys.W): //w
-                    if (arduino != null)
-                    {
-                        arduino.SendPacket(3, intensityPercent, durationPercent);
-                    }
+                    upFeedback.BackColor = Color.LimeGreen;
+                    feedbackPlayer.setUp();
+                    log.writeTimeAction("Up Key Press");
                     break;
+                case (Keys.Down):
                 case (Keys.S): //s
-                    if (arduino != null)
-                    {
-                        arduino.SendPacket(1, intensityPercent, durationPercent);
-                    }
+                    downFeedback.BackColor = Color.LimeGreen;
+                    feedbackPlayer.setDown();
+                    log.writeTimeAction("Down Key Press");
                     break;
-
+                case (Keys.Enter):
                 case (Keys.E): //e
-                    if (arduino != null)
-                    {
-                        arduino.SendPacket(5, intensityPercent, durationPercent);
-                    }
+                    itemFoundFeedback.BackColor = Color.LimeGreen;
+                    feedbackPlayer.setFound();
+                    log.writeTimeAction("Item Found Key Press");
+                    break;
+                case (Keys.Q):
+                    StopFeedback.BackColor = Color.LimeGreen;
+                    feedbackPlayer.setStop();
+                    log.writeTimeAction("Stop Key Press");
+                    break;
+                case (Keys.F):
+                    stepForwardFeedback.BackColor = Color.LimeGreen;
+                    feedbackPlayer.setForward();
+                    log.writeTimeAction("Step Forward Key Press");
+                    break;
+                case (Keys.R):
+                    stepBackwardFeedback.BackColor = Color.LimeGreen;
+                    feedbackPlayer.setBackward();
+                    log.writeTimeAction("Step Backward Key Press");
                     break;
             }
 
@@ -375,6 +502,19 @@ namespace WristbandCsharp
             vibLabel.Text = (vibrationSlider.Value * 10).ToString();
         }
 
+        //private void proximitySlider_Scroll(object sender, EventArgs e)
+        //{
+        //    proximity = this.proximitySlider.TabIndex * 10;
+        //    //Can put in text later if we need to.
+        //    proximityLevel.Text = "" + this.proximitySlider.TabIndex * 10;
+        //}
+
+        //private void proximitySlider_ValueChanged(object sender, EventArgs e)
+        //{
+        //    proximity = proximitySlider.Value * 10;
+        //    proximityLevel.Text = (proximitySlider.Value * 10).ToString();
+        //}
+
         private void label3_Click_1(object sender, EventArgs e)
         {
 
@@ -394,9 +534,11 @@ namespace WristbandCsharp
         private void button10_Click_1(object sender, EventArgs e)
         {
             reader.SpeakAsync("Hello, and welcome to the Alex personal shopping assistant! I will be helping you find and get some items off of some store shelves today. To assist us with this job, I have a pre-programmed list of a few items we’ll be picking up. If you have any questions for me at any time, just say ‘Hey, Alex’. Why don’t you try saying that now just to make sure I can hear you?");
+            log.writeTimeAction("Introduction1");
             //Introduction  - muted temporarily
             //checkAudio(); //remove temporarily. PUT IT BACK ON
-            randomSelection();
+            //randomSelection();
+
 
         }
 
@@ -466,7 +608,7 @@ namespace WristbandCsharp
 
         private void FF_ShelfScan_Click(object sender, EventArgs e)
         {
-            reader.SpeakAsync("Whenever you’re ready, just extend your hand in the direction of the shelf. For this item, we will be using the tone-based location method you practiced earlier. You can go ahead and start whenever you are ready.");
+            reader.SpeakAsync("Whenever you’re ready, just extend your hand in the direction of the shelf. For this item, we will be using the tone-based feedback. You can go ahead and start whenever you are ready.");
             //Begin first shelf scan
         }
 
@@ -664,92 +806,103 @@ namespace WristbandCsharp
             Controls.Add(noHeard);
         }
 
-        private void randomSelection()
-        {
-            //Function used to pick the order of events. Creates new buttons, sets controls automatically.
-            //string[] itemArray = new string[] {"item1Retreive, item2Retrieve, item3Retrieve, item4Retreive, item5Retreive"}; (placed this as global)
+        //private void randomSelection()
+        //{
+        //    //Function used to pick the order of events. Creates new buttons, sets controls automatically.
+        //    //string[] itemArray = new string[] {"item1Retreive, item2Retrieve, item3Retrieve, item4Retreive, item5Retreive"}; (placed this as global)
 
             
-            if (globalRandomRemaining != 0)
-            {
+        //    if (globalRandomRemaining != 0)
+        //    {
 
-                int randomIndex = rnd.Next(5); //generates the random number
+        //        int randomIndex = rnd.Next(5); //generates the random number
 
-                //Need to check if the number has been used before. Otherwise, this will run forever. UGHHHHHHHH
-                //Need to generate a number between 0 and 4. This part still works. Now will set flags of true/flase for whether each of them has been used. If used, repeat.
-                //Get rid of global remaining reduction. 
+        //        //Need to check if the number has been used before. Otherwise, this will run forever. UGHHHHHHHH
+        //        //Need to generate a number between 0 and 4. This part still works. Now will set flags of true/flase for whether each of them has been used. If used, repeat.
+        //        //Get rid of global remaining reduction. 
 
-                if (randomIndex == 0)
-                {
-                    if (item1 == false)
-                    {
-                        item1Retrieve();
-                        //itemArray.Remove("item1Retreive");
-                        item1 = true;
-                        globalRandomRemaining--;
-                    }
-                    else { randomSelection(); }
-                }
-                else if (randomIndex == 1)
-                { 
-                    if (item2 == false)
-                    {
-                        item2Retrieve(); 
-                        //itemArray.Remove("item2Retrieve");
-                        item2 = true;
-                        globalRandomRemaining--;
-                    }
-                    else { randomSelection(); }
+        //        if (randomIndex == 0)
+        //        {
+        //            if (item1 == false)
+        //            {
+        //                item1Retrieve();
+        //                //itemArray.Remove("item1Retreive");
+        //                item1 = true;
+        //                globalRandomRemaining--;
+        //            }
+        //            else { randomSelection(); }
+        //        }
+        //        else if (randomIndex == 1)
+        //        { 
+        //            if (item2 == false)
+        //            {
+        //                item2Retrieve(); 
+        //                //itemArray.Remove("item2Retrieve");
+        //                item2 = true;
+        //                globalRandomRemaining--;
+        //            }
+        //            else { randomSelection(); }
 
-                }
-                else if (randomIndex == 2)
-                {
-                    if (item3 == false)
-                    {
-                        item3Retrieve();
-                        //itemArray.Remove("item3Retrieve");
-                        item3 = true;
-                        globalRandomRemaining--;
-                    }
-                    else { randomSelection(); }
-                }
-                else if (randomIndex == 3)
-                {
-                    if (item4 == false)
-                    {
-                        item4Retrieve();
-                        //itemArray.Remove("item4Retrieve");
-                        item4 = true;
-                        globalRandomRemaining--;
-                    }
-                    else { randomSelection(); }
-                }
-                else if (randomIndex == 4)
-                {
-                    if (item5 == false)
-                    {
-                        item5Retrieve();
-                        //itemArray.Remove("item5Retrieve");
-                        item5 = true;
-                        globalRandomRemaining--;
-                    }
-                    else { randomSelection(); }
-                }
-                //Above if statements activate the appropriate function and then remove the item from the list.
+        //        }
+        //        else if (randomIndex == 2)
+        //        {
+        //            if (item3 == false)
+        //            {
+        //                item3Retrieve();
+        //                //itemArray.Remove("item3Retrieve");
+        //                item3 = true;
+        //                globalRandomRemaining--;
+        //            }
+        //            else { randomSelection(); }
+        //        }
+        //        else if (randomIndex == 3)
+        //        {
+        //            if (item4 == false)
+        //            {
+        //                item4Retrieve();
+        //                //itemArray.Remove("item4Retrieve");
+        //                item4 = true;
+        //                globalRandomRemaining--;
+        //            }
+        //            else { randomSelection(); }
+        //        }
+        //        else if (randomIndex == 4)
+        //        {
+        //            if (item5 == false)
+        //            {
+        //                item5Retrieve();
+        //                //itemArray.Remove("item5Retrieve");
+        //                item5 = true;
+        //                globalRandomRemaining--;
+        //            }
+        //            else { randomSelection(); }
+        //        }
+        //        //Above if statements activate the appropriate function and then remove the item from the list.
                 
-            }
-            else
-            {
-                FINISHED.Location = new Point(1400, 100);
-                FINISHED.Height = 40;
-                FINISHED.Width = 150;
-                FINISHED.Name = "FINISHED";
-                FINISHED.Text = "FINISHED";
-                FINISHED.Click += new EventHandler(FINISHED_Click);
-                Controls.Add(FINISHED);
-            }
+        //    }
+        //    else
+        //    {
+        //        FINISHED.Location = new Point(1400, 100);
+        //        FINISHED.Height = 40;
+        //        FINISHED.Width = 150;
+        //        FINISHED.Name = "FINISHED";
+        //        FINISHED.Text = "FINISHED";
+        //        FINISHED.Click += new EventHandler(FINISHED_Click);
+        //        Controls.Add(FINISHED);
+        //    }
 
+        //}
+
+        // introduction to retrieve corn pops
+        
+
+        // start a shelf scan
+        // IMPLEMENT TIMER HERE
+        private void beginShelfScan()
+        {
+            beginShelfScanButton.Visible = true;
         }
+
 
         private void item1Retrieve()
         {
@@ -928,7 +1081,8 @@ namespace WristbandCsharp
             this.SpokenFeedback.Checked = true;
             if (arduino == null)
             {
-                arduino = new Arduino((string)comboBox2.SelectedItem);
+                feedbackPlayer.initializeArduino((string)comboBox2.SelectedItem);
+                //arduino = new Arduino((string)comboBox2.SelectedItem);
                 motorActive.Text = "Motor is ACTIVE";
                 motorActive.ForeColor = Color.Green;
                 comboBox2.Text = "ON";
@@ -1023,46 +1177,88 @@ namespace WristbandCsharp
             //Re-Do Yes
 
             //test random function
-            randomSelection();
+            //randomSelection();
         }
 
         private void nextItem_Click(object sender, EventArgs e)
         {
-            if (lastProcedureIndex == 0)
+            endSearch.Visible = false;
+            startSearchButton.Visible = false;
+            beginShelfScanButton.Visible = false;
+            nextItem.Visible = false;
+            feedbackButtons.Visible = false;
+
+            if (cerealName == "Corn Pops")
             {
-                Controls.Remove(FF_Intro);
-                Controls.Remove(FF_Alternate);
-                Controls.Remove(FF_Switch);
-                Controls.Remove(FF_Stay);
-                Controls.Remove(FF_ShelfScan);
-                //remove frosted flakes elements
+                cerealName = "Mini Wheats";
+                foodIntroButton.Text = "Mini Wheats Introduction";
             }
-            else if (lastProcedureIndex == 1)
+            else if (cerealName == "Mini Wheats")
             {
-                Controls.Remove(SBBQ_Intro);
-                Controls.Remove(SBBQ_ShelfScan);
+                cerealName = "Frosted Flakes";
+                foodIntroButton.Text = "Frosted Flakes Introduction";
             }
-            else if (lastProcedureIndex == 2)
+            else if (cerealName == "Frosted Flakes")
             {
-                Controls.Remove(SoupIntro);
-                Controls.Remove(Soup2for1);
-                Controls.Remove(SoupGet1);
-                Controls.Remove(SoupGet2);
-                Controls.Remove(SoupShelfScan1);
-                Controls.Remove(SoupDepth);
-                Controls.Remove(SoupShelfScan2);
+                //cerealName = "Fruit Loops";
+                //foodIntroButton.Text = "Fruit Loops Introduction";
+                //alternative.Visible = false;
+                //getAlternative.Visible = false;
+                //getOriginal.Visible = false;
+                cerealName = "";
+                foodIntroButton.Visible = false;
+
             }
-            else if (lastProcedureIndex == 3)
+            //else if (cerealName == "Fruit Loops")
+            //{
+                //cerealName = "Raisin Bran";
+                //foodIntroButton.Text = "Raisin Bran Introduction";
+                //twoForOne.Visible = false;
+                //get1.Visible = false;
+                //get2.Visible = false;
+            //}
+            else
             {
-                Controls.Remove(RedHotIntro);
-                Controls.Remove(RedHotShelfScan);
+                cerealName = "";
+                foodIntroButton.Visible = false;
             }
-            else if (lastProcedureIndex == 4)
-            {
-                Controls.Remove(HeinzIntro);
-                Controls.Remove(HeinzShelfScan);
-            }
-            randomSelection();
+
+
+            //if (lastProcedureIndex == 0)
+            //{
+            //    Controls.Remove(FF_Intro);
+            //    Controls.Remove(FF_Alternate);
+            //    Controls.Remove(FF_Switch);
+            //    Controls.Remove(FF_Stay);
+            //    Controls.Remove(FF_ShelfScan);
+            //    //remove frosted flakes elements
+            //}
+            //else if (lastProcedureIndex == 1)
+            //{
+            //    Controls.Remove(SBBQ_Intro);
+            //    Controls.Remove(SBBQ_ShelfScan);
+            //}
+            //else if (lastProcedureIndex == 2)
+            //{
+            //    Controls.Remove(SoupIntro);
+            //    Controls.Remove(Soup2for1);
+            //    Controls.Remove(SoupGet1);
+            //    Controls.Remove(SoupGet2);
+            //    Controls.Remove(SoupShelfScan1);
+            //    Controls.Remove(SoupDepth);
+            //    Controls.Remove(SoupShelfScan2);
+            //}
+            //else if (lastProcedureIndex == 3)
+            //{
+            //    Controls.Remove(RedHotIntro);
+            //    Controls.Remove(RedHotShelfScan);
+            //}
+            //else if (lastProcedureIndex == 4)
+            //{
+            //    Controls.Remove(HeinzIntro);
+            //    Controls.Remove(HeinzShelfScan);
+            //}
+            ////randomSelection();
 
         }
 
@@ -1076,57 +1272,122 @@ namespace WristbandCsharp
 
         }
 
+        //Can't hear button
         private void CantHear_Click(object sender, EventArgs e)
         {
             reader.SpeakAsync("I'm having some trouble hearing you. Try speaking a little louder. Just say 'Alex' to see if I can hear you.");
         }
 
+        //Can hear button
         private void CanHear_Click(object sender, EventArgs e)
         {
-            reader.SpeakAsync("OK, great, I can hear you clearly. Let's get started.");
+            reader.SpeakAsync("OK, great, I can hear you clearly.");
         }
 
         private void WrongItem_Click(object sender, EventArgs e)
         {
             reader.SpeakAsync("You have grabbed the incorrect item. Would you like to try to grab the correct item again?");
+            log.writeTimeAction("Wrong Item Button");
         }
 
         private void button11_Click_1(object sender, EventArgs e)
         {
             reader.SpeakAsync("Ok, let's rescan the shelf. When ready, extend your hand towards the shelf.");
+            // create a timer here
+            startSearchButton.Visible = true;
+            endSearch.Visible = true;
+            log.writeTimeAction("Re-search Button");
         }
 
         private void SkipResearch_Click(object sender, EventArgs e)
         {
             reader.SpeakAsync("OK, let's just skip this item and move on to the next one.");
+            log.writeTimeAction("Skip Re-Search button");
         }
 
         private void button22_Click(object sender, EventArgs e)
         {
-            reader.SpeakAsync("As you move through our store today, you can keep your arm resting at your side. Don't hold up your arm until I tell you to do so. For each item that we find, we will test a different style of retrieving items. Before attempting to get each item, we will walk through a brief demo about what you will be experiencing.");
+            reader.SpeakAsync("As you move through our store today, you can keep your arm resting at your side. Don't hold up your arm until I tell you to do so. For each item that we find, we will test a different style of retrieving items.");
+            log.writeTimeAction("Introduction 2");
         }
 
         private void button23_Click(object sender, EventArgs e)
         {
-            reader.SpeakAsync("While grabbing each item, reach forward when directed to do so until you touch an item on the shelf. If the device does not give you any further corrects, go ahead and grab the item. If it offers directional assistance after touching an item, it means you are slightly off-target and the device will try to get you on track.");
+            reader.SpeakAsync("While grabbing each item, reach forward when directed to do so until you touch an item on the shelf. If the device does not give you any further corrects, go ahead and grab the item. If it offers directional assistance after touching an item, it means you are slightly off-target and the device will try to get you on track. Let's get started.");
+            log.writeTimeAction("Introduction 3");
+            cerealName = "No Cereal";
+            feedbackType = feedbackTypeAssigner();
+
         }
 
         private void button11_Click_2(object sender, EventArgs e)
         {
-            reader.Speak("Before grabbing the next item, let's practice how you are going to grab the next food item from the shelf. This time, you will be using a tone based sound system to help you find items. I will now play the sound you will hear to move left.");
-            button1.PerformClick();
+            feedbackPlayer.setTonal(true);
+            feedbackPlayer.setSpoken(false);
+            feedbackPlayer.setVibration(false);
+
+            reader.Speak("Before grabbing the next item, let's practice how you are going to grab the next food item from the shelf. This time, you will be hearing a tone based sound. I will now play the sound you will hear to move left.");
+            feedbackPlayer.setLeft();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Now the sound you will hear to move to the right");
-            button2.PerformClick();
+            feedbackPlayer.setRight();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Now the sound you will hear to move up");
-            button7.PerformClick();
+            feedbackPlayer.setUp();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Now the sound you will hear to move down");
-            button3.PerformClick();
+            feedbackPlayer.setDown();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Now the sound you will hear to stop");
+            feedbackPlayer.setStop();
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Now the sound you will hear to step backward");
+            feedbackPlayer.setBackward();
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Now the sound you will hear to step forward");
+            feedbackPlayer.setForward();
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Finally, this is the sound you will hear to move your hand forward.");
-            button8.PerformClick();
+            feedbackPlayer.setFound();
+            feedbackPlayer.giveFeedback(1, 0);
             Thread.Sleep(1500);
             reader.Speak("Would you like to hear these sounds again, or move on?");
         }
@@ -1143,82 +1404,673 @@ namespace WristbandCsharp
 
         private void button12_Click_1(object sender, EventArgs e)
         {
-            reader.Speak("Before grabbing the next item, let's practice how you are going to grab the next food item from the shelf. This time, you will be using a spoken-word based sound system to help you find items. I will now play the sound you will hear to move left.");
-            button1.PerformClick();
+
+            feedbackPlayer.setTonal(false);
+            feedbackPlayer.setSpoken(true);
+            feedbackPlayer.setVibration(false);
+
+            reader.Speak("This time, you will be hearing a spoken-word based sound system. I will now play the sound you will hear to move left.");
+            feedbackPlayer.setLeft();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Now the sound you will hear to move to the right");
-            button2.PerformClick();
+            feedbackPlayer.setRight();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Now the sound you will hear to move up");
-            button7.PerformClick();
+            feedbackPlayer.setUp();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Now the sound you will hear to move down");
-            button3.PerformClick();
+            feedbackPlayer.setDown();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Now the sound you will hear to step backward");
+            feedbackPlayer.setBackward();
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Now the sound you will hear to step forward");
+            feedbackPlayer.setForward();
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("This is the sound you will hear to stop.");
+            feedbackPlayer.setStop();
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Finally, this is the sound you will hear to move your hand forward.");
-            button8.PerformClick();
+            feedbackPlayer.setFound();
+            feedbackPlayer.giveFeedback(1, 0);
             Thread.Sleep(1500);
             reader.Speak("Would you like to hear these sounds again, or move on?");
         }
 
         private void button13_Click_1(object sender, EventArgs e)
         {
-            reader.Speak("Before grabbing the next item, let's practice how you are going to grab the next food item from the shelf. This time, you will be using a haptic or vibration based system to help you find items. I will now activate the motor you will feel to move left.");
-            button1.PerformClick();
+            feedbackPlayer.setTonal(false);
+            feedbackPlayer.setSpoken(false);
+            feedbackPlayer.setVibration(true);
+
+            reader.Speak("This time, you will feel a haptic vibration based system. I will now activate the motor you will feel to move left.");
+            feedbackPlayer.setLeft();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Now the vibration you will feel to move to the right");
-            button2.PerformClick();
+            feedbackPlayer.setRight();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Now the vibration you will feel to move up");
-            button7.PerformClick();
+            feedbackPlayer.setUp();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Now the vibration you will feel to move down");
-            button3.PerformClick();
+            feedbackPlayer.setDown();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Now the vibration you will feel to step backward");
+            feedbackPlayer.setBackward();
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Now the vibration you will feel to step forward");
+            feedbackPlayer.setForward();
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Now the vibration you will feel to stop.");
+            feedbackPlayer.setStop();
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
             reader.Speak("Finally, this is the vibration you will feel to move your hand forward.");
-            button8.PerformClick();
+            feedbackPlayer.setFound();
+            feedbackPlayer.giveFeedback(1, 0);
             Thread.Sleep(1500);
-            reader.Speak("Would you like to feel these motors again, or move on?");
+            reader.Speak("Would you like to hear these sounds again, or move on?");
         }
 
         private void button14_Click(object sender, EventArgs e)
         {
-            reader.Speak("Before grabbing the next item, let's practice how you are going to grab the next food item from the shelf. This time, you will be using a haptic or vibration based system as well as tonal feedback to help you find items. I will now activate the motor you will feel, and play the sound you will hear to move left.");
-            button1.PerformClick();
+            feedbackPlayer.setTonal(true);
+            feedbackPlayer.setSpoken(false);
+            feedbackPlayer.setVibration(true);
+
+            reader.Speak("This time, you will feel a haptic vibration based system as weel as hear a tonal feedback, I will now activate the motor you will feel, and play the sound you will hear to move left.");
+            feedbackPlayer.setLeft();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
-            reader.Speak("Now the vibration and sound you will feel to move to the right");
-            button2.PerformClick();
+            reader.Speak("Now the sound and the vibration to hear and feel to move to the right");
+            feedbackPlayer.setRight();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
-            reader.Speak("Now the vibration and sound you will feel to move up");
-            button7.PerformClick();
+            reader.Speak("Now the sound and the vibration to hear and feel to move up");
+            feedbackPlayer.setUp();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
-            reader.Speak("Now the vibration and sound you will feel to move down");
-            button3.PerformClick();
+            reader.Speak("Now the sound and the vibration to hear and feel to move down");
+            feedbackPlayer.setDown();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
-            reader.Speak("Finally, this is the vibration and sound you will feel to move your hand forward.");
-            button8.PerformClick();
+            reader.Speak("Now the sound and the vibration to hear and feel to step backward");
+            feedbackPlayer.setBackward();
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
-            reader.Speak("Would you like to feel these motors and hear the sounds again, or move on?");
+            reader.Speak("Now the sound and the vibration to hear and feel to step forward");
+            feedbackPlayer.setForward();
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Now the sound and the vibration to hear and feel to stop.");
+            feedbackPlayer.setStop();
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Finally, this is the sound and the vibration you will hear and feel to move your hand forward.");
+            feedbackPlayer.setFound();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1500);
+            reader.Speak("Would you like to hear these sounds again, or move on?");
         }
 
         private void button15_Click(object sender, EventArgs e)
         {
-            reader.Speak("Before grabbing the next item, let's practice how you are going to grab the next food item from the shelf. This time, you will be using a haptic or vibration based system as well as speech feedback to help you find items. I will now activate the motor you will feel, and play the sound you will hear to move left.");
-            button1.PerformClick();
+            feedbackPlayer.setTonal(false);
+            feedbackPlayer.setSpoken(true);
+            feedbackPlayer.setVibration(true);
+
+            reader.Speak(". This time, you will feel a haptic vibration based system as well as hear a speech feedback. I will now activate the motor you will feel, and play the sound you will hear to move left.");
+            feedbackPlayer.setLeft();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
-            reader.Speak("Now the vibration and sound you will feel to move to the right");
-            button2.PerformClick();
+            reader.Speak("Now the vibration and the sound you will feel and hear to move to the right");
+            feedbackPlayer.setRight();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
-            reader.Speak("Now the vibration and sound you will feel to move up");
-            button7.PerformClick();
+            reader.Speak("Now the vibration and the sound you will feel and hear to move up");
+            feedbackPlayer.setUp();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
-            reader.Speak("Now the vibration and sound you will feel to move down");
-            button3.PerformClick();
+            reader.Speak("Now the vibration and the sound you will feel and hear to move down");
+            feedbackPlayer.setDown();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1000);
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
-            reader.Speak("Finally, this is the vibration and sound you will feel to move your hand forward.");
-            button8.PerformClick();
+            reader.Speak("Now the vibration and the sound you will feel and hear to step backward");
+            feedbackPlayer.setBackward();
+            feedbackPlayer.giveFeedback(1, 0);
+
             Thread.Sleep(1500);
-            reader.Speak("Would you like to feel these motors and hear the sounds again, or move on?");
+            reader.Speak("Now the vibration and the sound you will feel and hear to step forward");
+            feedbackPlayer.setForward();
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Now the vibration and the sound you will feel and hear to stop.");
+            feedbackPlayer.setStop();
+            feedbackPlayer.giveFeedback(1, 0);
+
+            Thread.Sleep(1500);
+            reader.Speak("Finally, this is the vibration and the sound you will feel and hear to move your hand forward.");
+            feedbackPlayer.setFound();
+            feedbackPlayer.giveFeedback(1, 0);
+            Thread.Sleep(1500);
+            reader.Speak("Would you like to hear these sounds again, or move on?");
+        }
+
+        private void TonalFeedback_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TonalFeedback.Checked) {
+                feedbackPlayer.setTonal(true);
+            }
+            else
+            {
+                feedbackPlayer.setTonal(false);
+            }
+        }
+
+        // STOP
+        private void StopButton_Click(object sender, EventArgs e)
+        {
+            feedbackPlayer.setStop();
+            feedbackPlayer.giveFeedback(1, 0);
+            log.writeTimeAction("stop click");
+        }
+
+        // CALL FEEDBACK METHOD BASED ON A TIMER
+        private void feedback(object sender, EventArgs e)
+        {
+            timerCount = timerCount + 1;
+            feedbackPlayer.giveFeedback(timerCount, timerCountMax);
+            if (timerCount >= timerCountMax) timerCount = 0;
+        }
+
+        // FORWARD
+        private void forwardButton_Click(object sender, EventArgs e)
+        {
+            feedbackPlayer.setForward();
+            log.writeTimeAction("stepforward click");
+        }
+
+        // BACKWARD
+        private void backwardButton_Click(object sender, EventArgs e)
+        {
+            feedbackPlayer.setBackward();
+            log.writeTimeAction("stepbackward click");
+        }
+
+        // spoken feedback box is checked
+        private void SpokenFeedback_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SpokenFeedback.Checked)
+            {
+                feedbackPlayer.setSpoken(true);
+            }
+            else
+            {
+                feedbackPlayer.setSpoken(false);
+            }
+        }
+
+        // the introduction for each item
+        private void button24_Click(object sender, EventArgs e)
+        {
+            reader.SpeakAsync("The next item on our list is a box of " + cerealName + ". One of the lab assistants can help you get to that section of our shelves now.");
+            log.writeTimeAction(foodIntroButton.Text);
+
+            feedbackButtons.Visible = true;
+            //if (cerealName == "Corn Pops") {
+            //    beginShelfScanButton.Visible = true;
+            //}
+            //else if (cerealName == "Mini Wheats")
+            //{
+            //    beginShelfScanButton.Visible = true;
+            //}
+            //else if (cerealName == "Frosted Flakes")
+            //{
+            //    alternative.Visible = true;
+            //}
+            //else if (cerealName == "Fruit Loops")
+            //{
+            //    twoForOne.Visible = true;
+            //}
+            //else if (cerealName == "Raisin Bran")
+            //{
+            //    beginShelfScanButton.Visible = true;
+            //}
+        }
+
+
+
+        // start a shelf scan for the new item
+        private void beginShelfScanButton_Click(object sender, EventArgs e)
+        {
+            reader.Speak("This time, to find and retrieve this box of cereal, we will be using the " + feedbackType + " feedback to help guide you. Whenever you’re ready, just extend your hand towards the shelf.");
+            // create a timer here
+            startSearchButton.Visible = true;
+            endSearch.Visible = true;
+            nextItem.Visible = true;
+            log.writeTimeAction(feedbackType);
+        }
+
+        public string feedbackTypeAssigner()
+        {
+            string feedbackType;
+            if (feedbackTypes.Count != 0)
+            {
+                Random random = new Random();
+                int index = random.Next(feedbackTypes.Count);
+                feedbackType = feedbackTypes[index];
+                feedbackTypes.RemoveAt(index);
+
+                feedbackPlayer.setTonal(false);
+                feedbackPlayer.setSpoken(false);
+                feedbackPlayer.setVibration(false);
+
+
+                if (feedbackType == "Haptic")
+                {
+                    feedbackPlayer.setVibration(true);
+                }
+
+                else if (feedbackType == "Tonal")
+                {
+                    feedbackPlayer.setTonal(true);
+                }
+
+                else if (feedbackType == "Speech")
+                {
+                    feedbackPlayer.setSpoken(true);
+                }
+
+                else if (feedbackType == "Speech and Tonal")
+                {
+                    feedbackPlayer.setSpoken(true);
+                    feedbackPlayer.setTonal(true);
+                }
+
+                else if (feedbackType == "Haptic and Speech")
+                {
+                    feedbackPlayer.setVibration(true);
+                    feedbackPlayer.setSpoken(true);
+                }
+            }
+
+            else
+            {
+                feedbackType = "none";
+            }
+
+            return feedbackType;
+        }
+
+
+
+        // end the shelf scan for the item
+        private void endSearch_Click(object sender, EventArgs e)
+        {
+            feedbackPlayer.setNone();
+
+            endSearch.Visible = false;
+            startSearchButton.Visible = false;
+            //beginShelfScanButton.Visible = false;
+            //nextItem.Visible = false;
+            //feedbackButtons.Visible = false;
+
+
+            if (cerealName == "Corn Pops")
+            {
+                cerealName = "Mini Wheats";
+                foodIntroButton.Text = "Mini Wheats Introduction";
+            }
+            else if (cerealName == "Mini Wheats")
+            {
+                cerealName = "Frosted Flakes";
+                foodIntroButton.Text = "Frosted Flakes Introduction";
+            }
+            else if (cerealName == "Frosted Flakes")
+            {
+                cerealName = "Fruit Loops";
+                foodIntroButton.Text = "Fruit Loops Introduction";
+                cerealName = "";
+                foodIntroButton.Visible = false;
+
+            }
+            //else if (cerealName == "Fruit Loops")
+            //{
+            //cerealName = "Raisin Bran";
+            //foodIntroButton.Text = "Raisin Bran Introduction";
+            //twoForOne.Visible = false;
+            //get1.Visible = false;
+            //get2.Visible = false;
+            //}
+            else
+            {
+                cerealName = "";
+                foodIntroButton.Visible = false;
+            }
+
+            //feedbackType = feedbackTypeAssigner();
+            //if (feedbackType == "none")
+            //{
+            //    nextItem.Visible = true;
+            //}
+            log.writeTimeAction("Finish Scan");
+
+        }
+
+        private void getAlternative_Click(object sender, EventArgs e)
+        {
+            reader.SpeakAsync("Okay, we'll get the generic Frosted Flakes instead.");
+            beginShelfScanButton.Visible = true;
+        }
+
+        private void getOriginal_Click(object sender, EventArgs e)
+        {
+            reader.SpeakAsync("Okay, we'll stick with the Frosted Flakes.");
+            beginShelfScanButton.Visible = true;
+        }
+
+        private void get2_Click(object sender, EventArgs e)
+        {
+            reader.SpeakAsync("Okay, I'll add a second box of cereal to the list.");
+            beginShelfScanButton.Visible = true;
+        }
+
+        private void get1_Click(object sender, EventArgs e)
+        {
+            reader.SpeakAsync("Okay, we'll just get the one box of cereal.");
+            beginShelfScanButton.Visible = true;
+        }
+
+        private void button24_Click_1(object sender, EventArgs e)
+        {
+            log.writeTimeAction("Start Scan ");
+        }
+
+        private void label1_Click_2(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click_3(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Tonal_Click(object sender, EventArgs e)
+        {
+            feedbackType = "Tonal";
+            feedbackPlayer.setTonal(true);
+            feedbackPlayer.setSpoken(false);
+            feedbackPlayer.setVibration(false);
+            //beginShelfScanButton.Visible = true;
+
+            reader.Speak("This time, to find and retrieve this box of cereal, we will be using the " + feedbackType + " feedback to help guide you. Whenever you’re ready, just extend your hand towards the shelf.");
+            // create a timer here
+            startSearchButton.Visible = true;
+            endSearch.Visible = true;
+            //nextItem.Visible = true;
+            log.writeTimeAction(feedbackType);
+        }
+
+        private void Speech_Click(object sender, EventArgs e)
+        {
+            feedbackType = "Spoken";
+            feedbackPlayer.setTonal(false);
+            feedbackPlayer.setSpoken(true);
+            feedbackPlayer.setVibration(false);
+            //beginShelfScanButton.Visible = true;
+
+            reader.Speak("This time, to find and retrieve this box of cereal, we will be using the " + feedbackType + " feedback to help guide you. Whenever you’re ready, just extend your hand towards the shelf.");
+            // create a timer here
+            startSearchButton.Visible = true;
+            endSearch.Visible = true;
+            //nextItem.Visible = true;
+            log.writeTimeAction(feedbackType);
+
+        }
+
+        private void Haptic_Click(object sender, EventArgs e)
+        {
+            feedbackType = "Haptic";
+            feedbackPlayer.setTonal(false);
+            feedbackPlayer.setSpoken(false);
+            feedbackPlayer.setVibration(true);
+            //beginShelfScanButton.Visible = true;
+
+            reader.Speak("This time, to find and retrieve this box of cereal, we will be using the " + feedbackType + " feedback to help guide you. Whenever you’re ready, just extend your hand towards the shelf.");
+            // create a timer here
+            startSearchButton.Visible = true;
+            endSearch.Visible = true;
+            //nextItem.Visible = true;
+            log.writeTimeAction(feedbackType);
+
+        }
+
+        private void tonalAndHaptic_Click(object sender, EventArgs e)
+        {
+            feedbackType = "Tonal and Haptic";
+            feedbackPlayer.setTonal(true);
+            feedbackPlayer.setSpoken(false);
+            feedbackPlayer.setVibration(true);
+            //beginShelfScanButton.Visible = true;
+
+            reader.Speak("This time, to find and retrieve this box of cereal, we will be using the " + feedbackType + " feedback to help guide you. Whenever you’re ready, just extend your hand towards the shelf.");
+            // create a timer here
+            startSearchButton.Visible = true;
+            endSearch.Visible = true;
+            //nextItem.Visible = true;
+            log.writeTimeAction(feedbackType);
+        }
+
+        private void speechAndHaptic_Click(object sender, EventArgs e)
+        {
+            feedbackType = "Speech and Haptic";
+            feedbackPlayer.setTonal(false);
+            feedbackPlayer.setSpoken(true);
+            feedbackPlayer.setVibration(true);
+            //beginShelfScanButton.Visible = true;
+
+            reader.Speak("This time, to find and retrieve this box of cereal, we will be using the " + feedbackType + " feedback to help guide you. Whenever you’re ready, just extend your hand towards the shelf.");
+            // create a timer here
+            startSearchButton.Visible = true;
+            endSearch.Visible = true;
+            //nextItem.Visible = true;
+            log.writeTimeAction(feedbackType);
+
+        }
+
+        private void groupBox6_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button26_Click(object sender, EventArgs e)
+        {
+            reader.SpeakAsync("The next item on our list is a box of Corn Pops. One of the lab assistants can help you get to that section of our shelves now.");
+            log.writeTimeAction("Corn Pops Introduction");
+        }
+
+        private void button30_Click(object sender, EventArgs e)
+        {
+            reader.SpeakAsync("The next item on our list is a box of Mini Wheats. One of the lab assistants can help you get to that section of our shelves now.");
+            log.writeTimeAction("Mini Wheats Introduction");
+        }
+
+        private void button28_Click(object sender, EventArgs e)
+        {
+            reader.SpeakAsync("The next item on our list is a box of Frosted Flakes. One of the lab assistants can help you get to that section of our shelves now.");
+            log.writeTimeAction("Frosted Flakes Introduction");
+        }
+
+        private void button29_Click(object sender, EventArgs e)
+        {
+            reader.SpeakAsync("The next item on our list is a box of Rasin Bran. One of the lab assistants can help you get to that section of our shelves now.");
+            log.writeTimeAction("Rasin Bran Introduction");
+        }
+
+        private void button31_Click(object sender, EventArgs e)
+        {
+            reader.SpeakAsync("The next item on our list is a box of Fruit Loops. One of the lab assistants can help you get to that section of our shelves now.");
+            log.writeTimeAction("Froot Loops Introduction");
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            proximity = this.proximitySlider.TabIndex * 10;
+            //Can put in text later if we need to.
+            //proximityLabel.Text = "" + this.proximitySlider.TabIndex * 10;
+
+        }
+
+
+        private void proximitySlider_ValueChanged(object sender, EventArgs e)
+        {
+            proximity = proximitySlider.Value * 10;
+            proximityLabel.Text = (proximitySlider.Value * 10).ToString();
+        }
+
+        private void label5_Click_4(object sender, EventArgs e)
+        {
+
+        }
+
+        private void StopFeedback_Click(object sender, EventArgs e)
+        {
 
         }
     }
