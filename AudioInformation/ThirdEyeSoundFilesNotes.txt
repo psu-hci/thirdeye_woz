@@ -1,0 +1,8 @@
+Down: 200Hz for 400 ms
+Left: 600Hz in left ear for 400 ms
+Right: 600Hz in right ear for 400 ms
+Up: 800 Hz for 400 ms
+step forward: 200, 400, 600, 800 Hz for 100 ms each, no breaks
+step backward: 800, 600, 400, 200 Hz for 100 ms each, no breaks
+stop: 800 Hz, three beeps of 100 ms with a 100 ms pause between
+reach forward: 800 Hz, 200 Hz, 200 ms each, alternating for four loops with no pauses
